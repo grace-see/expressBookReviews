@@ -75,6 +75,19 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   }
 });
 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const username = req.body.username;
+  const isbn = req.params.isbn;
+
+  if (username) {
+    books.filter((review) => {
+      return review.username !== username;
+    });
+  }
+  
+  res.send(`The review made by ${username} has been deleted.`);
+})
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
