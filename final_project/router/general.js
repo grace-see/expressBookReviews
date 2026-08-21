@@ -103,4 +103,17 @@ public_users.get('/async/author/:author', async function (req, res) {
   }
 });
 
+
+// Task 13: Get book details based on title using async/await
+public_users.get('/async/title/:title', async function (req, res) {
+  const title = req.params.title;
+
+  try {
+    const response = await axios.get('http://localhost:8800/title/' + title);
+    return res.status(200).json(JSON.stringify(response.data, null, 4));
+  } catch (error) {
+    return res.status(404).json({message: "No books found for this title"});
+  }
+});
+
 module.exports.general = public_users;
