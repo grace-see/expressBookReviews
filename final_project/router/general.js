@@ -87,7 +87,19 @@ public_users.get('/async/isbn/:isbn', async function (req, res) {
     const response = await axios.get('http://localhost:8800/isbn/' + isbn);
     return res.status(200).send(JSON.stringify(response.data, null, 4));
   } catch (error) {
-    return res.status(500).json({message: "Book not found"});
+    return res.status(404).json({message: "Book not found"});
+  }
+});
+
+// Task 12: Get book details based on author using async/await
+public_users.get('/async/author/:author', async function (req, res) {
+  const author = req.params.author;
+
+  try {
+    const response = await axios.get('http://localhost:8800/author/' + author);
+    return res.status(200).json(JSON.stringify(response.data, null, 4));
+  } catch (error) {
+    return res.status(404).json({message: "No books found for this author"});
   }
 });
 
