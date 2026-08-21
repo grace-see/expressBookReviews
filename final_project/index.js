@@ -8,10 +8,11 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUninitialized: true}))
+app.use("/customer", session({secret: "fingerprint_customer", resave: true, saveUninitialized: true, cookie: {maxAge: 60*60, httpOnly: true}}));
 
-app.use("/customer/auth/*", function auth(req,res,next){
+app.use("/customer/auth/*", function auth(req,res,next) {
     //Write the authenication mechanism here
+    console.log(req.session.id);
     if (req.session.authorization) {
         let token = req.session.authorization['accessToken'];
         
@@ -29,7 +30,7 @@ app.use("/customer/auth/*", function auth(req,res,next){
     }
 });
  
-const PORT =8800;
+const PORT = 8800;
 
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);

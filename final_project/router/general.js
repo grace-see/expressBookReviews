@@ -12,8 +12,8 @@ public_users.post("/register", (req,res) => {
 
   if (username && password) {
     if (isValid(username)) {
-      users.push({"username": username, "password": password});
-      return res.status(200).json({message: "User successfullly registered. Now you can log in"});
+      users.push({username: username, password: password});
+      return res.status(200).json({message: "User successfully registered. Now you can log in"});
     } else {
       return res.status(404).json({message: "User already exists!"});
     }
@@ -32,35 +32,41 @@ public_users.get('/',function (req, res) {
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
-  res.send(books.get(isbn));
+  res.send(JSON.stringify(books[isbn], null, 4));
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
   const author = req.params.author;
-  let authorBooks = books.filter((book) => {
-    return (book.author === author);
-  });
-  res.send(authorBooks);
+  let authorBooks = [];
+  for (const key in books) {
+    if (books[key].author.search(author) > -1) {
+      authorBooks.push({[key]: books[key]});
+    }
+  }
+  res.send(JSON.stringify(authorBooks, null, 4));
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  let titleBooks = books.filter((book) => {
-    return (book.title === title);
-  });
-  res.send(titleBooks);
+  let titleBooks = [];
+  for (const key in books) {
+    if (books[key].title.search(title) > -1) {
+      titleBooks.push({[key]: books[key]});
+    }
+  }
+  res.send(JSON.stringify(titleBooks, null, 4));
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   //Write your code here
   const isbn = req.params.isbn;
-  let reviews = books.get(isbn).reviews;
-  res.send(reviews);
+  let reviews = books[isbn].reviews;
+  res.send(JSON.stringify(reviews, null, 4));
 });
 
 module.exports.general = public_users;
